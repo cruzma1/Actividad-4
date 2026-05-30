@@ -1,0 +1,96 @@
+import java.util.Scanner;
+
+    public class Main{
+        public static void main(String[] args){
+            Scanner entrada =new Scanner(System.in);
+            AddressBook agenda =new AddressBook();
+
+            agenda.load();
+
+            int opcion = 0;
+
+            do {System.out.println("AdressBook");
+                System.out.println("Contactos registrados: "+agenda.getTotalContactos());
+                System.out.println("1 Lista de contactos");
+                System.out.println("2 Crear contacto");
+                System.out.println("3 Eliminar contacto");
+                System.out.println("4 Editar contacto");
+                System.out.println("5 Buscar contacto por nombre");
+                System.out.println("6 Guardar agenda");
+                System.out.print("Elige una opcion: ");
+
+                if (!entrada.hasNextInt()){
+                    System.out.println("Ingresa numero valido");
+                    entrada.next();
+                    continue;
+                }
+                opcion=entrada.nextInt();
+                entrada.nextLine();
+
+                switch(opcion){
+                    case 1:
+                        agenda.list();
+                        break;
+                    case 2:
+                        String numero = "";
+                        while (true) {
+                            System.out.print("Introduce numero ");
+                            numero=entrada.nextLine().trim();
+                            if (numero.matches("\\d+")){
+                                break;
+                            }else{
+                                System.out.println("ingrese solo numeros");
+                            }
+                        }
+
+                        System.out.print("Nombre de contacto ");
+                        String nombre=entrada.nextLine().trim();
+
+                        if (nombre.isEmpty()){
+                            System.out.println("Introduzca al menos una letra o numero");
+                        }else{
+                            agenda.create(numero, nombre);
+                            agenda.save();
+                        }
+                        break;
+
+                    case 3:
+                        System.out.print("Cual es el numero que deseas eliminar? ");
+                        String numEliminar = entrada.nextLine().trim();
+                        agenda.delete(numEliminar);
+                        agenda.save();
+                        break;
+
+                    case 4:
+                        System.out.print("Cual es el numero que deseas editar? ");
+                        String numEditar = entrada.nextLine().trim();
+                        System.out.print("Introduce nombre ");
+                        String nuevoNombre = entrada.nextLine().trim();
+                        agenda.update(numEditar, nuevoNombre);
+                        agenda.save();
+                        break;
+
+                    case 5:
+                        System.out.print("Introduce el nombre ");
+                        String nombreBuscar=entrada.nextLine().trim();
+                        if (nombreBuscar.isEmpty()){
+                            System.out.println("Introduce al menos un valor");
+                        }else{
+                            agenda.searchByName(nombreBuscar);
+                        }
+
+                        break;
+                    case 6:
+
+                        agenda.save();
+                        System.out.println("Finaliza programa");
+                        break;
+
+                    default:
+                        System.out.println("Intenta otra vez ");
+                }
+            } while (opcion != 6);
+
+            entrada.close();
+        }
+    }
